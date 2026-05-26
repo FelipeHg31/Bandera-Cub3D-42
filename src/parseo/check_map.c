@@ -6,114 +6,108 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 23:34:22 by juan-her          #+#    #+#             */
-/*   Updated: 2026/05/25 01:10:41 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/05/26 14:23:01 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parseo.h"
 
-static int	ft_is_valid(char c)
-{
-	return(c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W'
-					|| c == ' ' || c == '\t');
-}
 
-static int ft_val_char_player(char **map, int *px, int *py)
+static int	ft_check_top_bottom(char **map, int y)
 {
-	int x;
-	int	y;
-	int	player;
-	
-	player = 0;
-	y = 0;
-	while (map[y])
+	int	x;
+
+	x = 0;
+	while (map[y][x])
 	{
-		x = 0;
-		while (map[y][x])
-		{
-			if (!ft_is_valid(map[y][x]))
-				return (printf("Error: invalid char\n"), 0);
-			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E' 
-					|| map[y][x] == 'W')
-			{
-				player++;
-				*px = x;
-				*py = y;
-			}
-			x++;
-		}
-		y++;
+		if (map[y][x] != '1' && map[y][x] != ' ' && map[y][x] != '\t')
+			return (0);
+		if (!ft_check_each_space(map, y, x))
+			return (0);
+		x++;
 	}
-	if (player != 1)
-		return (printf("Error: invalid player\n"), 0);
 	return (1);
 }
 
-static char	**ft_copy_map(char **map, int height)
+static int	ft_check_sides(char **map, int height)
 {
-	char	**copy;
-	int		i;
+	int	i;
+	int	j;
 
-	copy = malloc(sizeof(char *) * (height + 1));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (i < height)
+	if (!ft_check_top_bottom(map, 0))
+		return (printf("Error: fila superior abierta\n"), 0);
+	i = 1;
+	while (i < height - 1)
 	{
-		copy[i] = ft_strdup(map[i]);
-		if (!copy[i])
-			return (ft_free_split(copy), NULL);
+		j = ft_strlen(map[i]) - 1;
+		while (j > 0 && (map[i][j] == ' ' || map[i][j] == '\t'))
+			j--;
+		if (map[i][j] != '1')
+			return (printf("Error: fila %d abierta por la derecha\n", i), 0);
+		if (!ft_check_inside(map, i, j))
+			return (printf("Error: fila %d abierta por dentro\n", i), 0);
 		i++;
 	}
-	copy[i] = NULL;
-	return (copy);
-}
-
-static int	ft_flood_fill(char **map, int x, int y)
-{
-	if (y < 0 || x < 0 || !map[y] || !map[y][x])
-		return (0);
-	if (map[y][x] == ' ')
-		return (0);
-	if (map[y][x] == '1' || map[y][x] == 'F')
-		return (1);
-	map[y][x] = 'F';
-	if (!ft_flood_fill(map, x + 1, y))
-		return (0);
-	if (!ft_flood_fill(map, x - 1, y))
-		return (0);
-	if (!ft_flood_fill(map, x, y + 1))
-		return (0);
-	if (!ft_flood_fill(map, x, y - 1))
-		return (0);
+	if (!ft_check_top_bottom(map, height - 1))
+		return (printf("Error: fila inferior abierta\n"), 0);
 	return (1);
 }
 
-static int	ft_val_closed_map(char **map, int height, int px, int py)
+static int	ft_check_player_pos(char **map, int height, int px, int py)
 {
-	char	**tmp;
+	if (py <= 0 || py >= height - 1)
+		return (printf("Error: jugador en el borde\n"), 0);
+	if (ft_is_space(map[py][px - 1]) || ft_is_space(map[py][px + 1]))
+		return (printf("Error: jugador expuesto horizontalmente\n"), 0);
+	if (!map[py - 1] || ft_strlen(map[py - 1]) <= (size_t)px
+		|| ft_is_space(map[py - 1][px]))
+		return (printf("Error: jugador expuesto arriba\n"), 0);
+	if (!map[py + 1] || ft_strlen(map[py + 1]) <= (size_t)px
+		|| ft_is_space(map[py + 1][px]))
+		return (printf("Error: jugador expuesto abajo\n"), 0);
+	return (1);
+}
 
-	tmp = ft_copy_map(map, height);
-	if (!tmp)
-		return (0);
-	if (!ft_flood_fill(tmp, px, py))
+static int	ft_val_char_player(char **map, int *px, int *py)
+{
+	int	pos[2];
+	int	player;
+
+	player = 0;
+	pos[0] = 0;
+	while (map[pos[0]])
 	{
-		printf("Error: mapa abierto\n");
-		ft_free_split(tmp);
-		return (0);
+		pos[1] = 0;
+		while (map[pos[0]][pos[1]])
+		{
+			if (!ft_is_valid(map[pos[0]][pos[1]]))
+				return (printf("Error: caracter invalido '%c'\n", map[pos[0]][pos[1]]), 0);
+			if (ft_strchr("NSEW", map[pos[0]][pos[1]]))
+			{
+				player++;
+				*px = pos[1];
+				*py = pos[0];
+			}
+			pos[1]++;
+		}
+		pos[0]++;
 	}
-	ft_free_split(tmp);
+	if (player != 1)
+		return (printf("Error: numero de jugadores invalido\n"), 0);
 	return (1);
 }
 
-int	ft_val_map(char **map, int height)
+int	ft_val_map(char **map, int height, int width)
 {
 	int	px;
 	int	py;
 
+	(void)width;
 	if (!ft_val_char_player(map, &px, &py))
 		return (0);
-	if (!ft_val_closed_map(map, height, px, py))
+	if (!ft_check_sides(map, height))
+		return (0);
+	if (!ft_check_player_pos(map, height, px, py))
 		return (0);
 	return (1);
 }

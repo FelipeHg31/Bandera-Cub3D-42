@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 21:18:16 by juan-her          #+#    #+#             */
-/*   Updated: 2026/05/24 23:28:42 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/05/25 16:46:11 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,10 @@ char	**ft_norm_map(t_line *lst, t_parseo *parse)
 	char	**map;
 	t_line	*tmp;
 	int		i;
-	int		w;
 
 	if (!lst)
 		return (NULL);
-	w = ft_get_weigth(lst);
+	parse->map->len_max = ft_get_weigth(lst);
 	map = ft_calloc(ft_len_lines(lst) + 1, sizeof(char *));
 	if (!map)
 		return (NULL);
@@ -90,7 +89,7 @@ char	**ft_norm_map(t_line *lst, t_parseo *parse)
 	i = 0;
 	while (tmp)
 	{
-		map[i] = ft_reg_line(tmp->text, w);
+		map[i] = ft_reg_line(tmp->text, parse->map->len_max);
 		if (!map[i])
 			return (ft_free_split(map), NULL);
 		tmp = tmp->next;

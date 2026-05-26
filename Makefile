@@ -6,7 +6,7 @@
 #    By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/22 20:00:40 by juan-her          #+#    #+#              #
-#    Updated: 2026/05/25 01:07:35 by juan-her         ###   ########.fr        #
+#    Updated: 2026/05/26 14:24:00 by juan-her         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ PARSE_SRCS = init_parse.c \
 CLEAN_SRCS = clean_1.c
 
 UTILS_FILE_SRC = get_next_line.c \
-					utils.c
+					utils.c \
+					utils_map.c
 
 SRCS		= $(addprefix $(SRC_DIR)/, $(MAIN_SRCS)) \
 				$(addprefix $(SRC_DIR)/parseo/, $(PARSE_SRCS)) \

@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/23 17:26:21 by juan-her          #+#    #+#             */
-/*   Updated: 2026/05/25 01:04:51 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/05/25 16:48:06 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ int	ft_parse(t_parseo *parse)
 	map = ft_norm_map(lst_map, parse);
 	if (!map)
 		return (0);
-	if (!ft_val_map(map, parse->map->height))
+	int i = 0;
+	while(map[i])
+		printf("%s\n", map[i++]);
+	if (!ft_val_map(map, parse->map->height, parse->map->len_max))
 		return (printf("No funciono"), 0);
 	printf("Map OK\n");
 	return (1);
