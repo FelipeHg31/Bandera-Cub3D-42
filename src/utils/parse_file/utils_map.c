@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/26 14:14:40 by juan-her          #+#    #+#             */
-/*   Updated: 2026/05/26 14:20:07 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/05/26 15:38:07 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,25 @@ int	ft_check_inside(char **map, int y, int x)
 		x--;
 	}
 	return (1);
+}
+
+t_map *ft_create_grid(t_map *map)
+{
+	t_map	*grid;
+	int		i;
+	
+	grid = (t_map *) malloc(sizeof(t_map));
+	if(!grid)
+		return (NULL);
+	grid->map = (char **) malloc(sizeof(char *) * (map->height + 1));
+	i = 0;
+	while (map->map[i])
+	{
+		grid->map[i] = ft_strdup(map->map[i]);
+		i++;
+	}
+	grid->map[i] = NULL;
+	grid->height = map->height;
+	grid->len_max= map->len_max;
+	return (grid);
 }
