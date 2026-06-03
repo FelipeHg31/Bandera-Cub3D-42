@@ -6,7 +6,7 @@
 #    By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/22 20:00:40 by juan-her          #+#    #+#              #
-#    Updated: 2026/06/02 18:33:48 by juan-her         ###   ########.fr        #
+#    Updated: 2026/06/03 14:03:32 by juan-her         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,6 @@ CLEAN_SRCS = clean_1.c
 UTILS_FILE_SRC = get_next_line.c utils.c utils_map.c
 ENGINE_SRCS = init_game.c render.c
 PLAYER_SRCS = player.c
-SCREEN_SRCS = screen_manager.c
 
 SRCS		= $(addprefix $(SRC_DIR)/, main.c) \
 			  $(addprefix $(SRC_DIR)/parseo/, $(PARSE_SRCS)) \

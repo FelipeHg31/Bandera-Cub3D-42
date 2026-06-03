@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 16:02:00 by juan-her          #+#    #+#             */
-/*   Updated: 2026/06/02 20:18:34 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:02:54 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	ft_get_pixel(t_textures *tex, int x, int y)
 
 static void	ft_put_pixel(t_game *g, int x, int y, int color)
 {
-	int i = y * g->screen.size_line + x * (g->screen.bpp / 8);
+	int i;
+	i = y * g->screen.size_line + x * (g->screen.bpp / 8);
 	g->screen.data[i] = color & 0xFF;
 	g->screen.data[i + 1] = (color >> 8) & 0xFF;
 	g->screen.data[i + 2] = (color >> 16) & 0xFF;
@@ -90,41 +91,33 @@ static void	ft_calc_wall(t_ray *r, t_game *g)
 		r->dist = (r->map_x - g->player.x / BLOCK + (1 - r->step_x) / 2) / r->dir_x;
 	else
 		r->dist = (r->map_y - g->player.y / BLOCK + (1 - r->step_y) / 2) / r->dir_y;
-
 	r->dist *= BLOCK;
-
 	r->line_height = g->screen.height / r->dist * BLOCK;
-
 	r->draw_start = -r->line_height / 2 + g->screen.height / 2;
 	if (r->draw_start < 0)
 		r->draw_start = 0;
-
 	r->draw_end = r->line_height / 2 + g->screen.height / 2;
 	if (r->draw_end >= g->screen.height)
 		r->draw_end = g->screen.height - 1;
-
 	if (r->side == 0)
 		r->tex = (r->dir_x > 0) ? &g->ea : &g->we;
 	else
 		r->tex = (r->dir_y > 0) ? &g->so : &g->no;
-
 	if (r->side == 0)
 		r->wall_x = g->player.y / BLOCK + r->dist / BLOCK * r->dir_y;
 	else
 		r->wall_x = g->player.x / BLOCK + r->dist / BLOCK * r->dir_x;
-
 	r->wall_x -= floor(r->wall_x);
-
 	r->tex_x = r->wall_x * r->tex->width;
 }
 
 static void	ft_draw_wall(t_game *g, t_ray *r, int x)
 {
-	int y = 0;
+	int y;
 
+	y = 0;
 	while (y < r->draw_start)
 		ft_put_pixel(g, x, y++, g->colorC);
-
 	while (y < r->draw_end)
 	{
 		int tex_y = (y - r->draw_start) * r->tex->heigth / r->line_height;
@@ -132,7 +125,6 @@ static void	ft_draw_wall(t_game *g, t_ray *r, int x)
 		ft_put_pixel(g, x, y, color);
 		y++;
 	}
-
 	while (y < g->screen.height)
 		ft_put_pixel(g, x, y++, g->colorF);
 }

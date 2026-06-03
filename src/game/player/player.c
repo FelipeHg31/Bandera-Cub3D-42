@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/02 16:03:39 by juan-her          #+#    #+#             */
-/*   Updated: 2026/06/02 20:09:05 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/06/03 14:03:20 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ int	ft_player_key_release(int keycode, void *player_ptr)
 	t_player	*player;
 
 	player = (t_player *)player_ptr;
-	
 	if (keycode == W)
 		player->key_up = false;
 	if (keycode == S)
