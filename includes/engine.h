@@ -24,20 +24,17 @@ typedef struct s_final_parse	t_final_parse;
 
 typedef struct s_engine
 {
-	t_screen	screen;
-	t_player	player;
-	char		**map;
-
-	t_texture	no;
-	t_texture	so;
-	t_texture	we;
-	t_texture	ea;
-
-	int			colorF;
-	int			colorC;
-
-	int			block_size;
-
+	t_screen		screen;
+	t_player		player;
+	char			**map;
+	t_texture		no;
+	t_texture		so;
+	t_texture		we;
+	t_texture		ea;
+	int				colorF;
+	int				colorC;
+	int				block_size;
+	t_final_parse	*final;
 }				t_engine;
 
 typedef struct s_ray
@@ -64,10 +61,16 @@ typedef struct s_ray
 }				t_ray;
 
 
+void	ft_init_ray(t_ray *r, t_engine *g, float angle);
+void	ft_calc_step(t_ray *r, t_engine *g);
+void	ft_perform_dda(t_ray *r, t_engine *g);
+void	ft_calc_wall(t_ray *r, t_engine *g);
+void	ft_draw_wall(t_engine *g, t_ray *r, int x);
 
-void	ft_init_engine(t_engine *g, t_final_parse *p);
+void	ft_init_engine(t_engine *g);
 void	ft_start_engine(t_engine *g);
 void	ft_free_engine(t_engine *g);
+int		ft_close(int keycode, void *param);
 
 
 #endif
